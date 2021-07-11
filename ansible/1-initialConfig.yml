@@ -1,0 +1,7 @@
+# initial config common to machines
+
+- hosts: all
+  order: sorted
+  become: yes
+  roles:
+    - requisites_config

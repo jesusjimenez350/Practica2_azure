@@ -1,0 +1,7 @@
+# NFS server installation
+
+- hosts: MasterNfs
+  order: sorted
+  become: yes
+  roles:
+    - nfs_config

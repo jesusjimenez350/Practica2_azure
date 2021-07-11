@@ -1,0 +1,53 @@
+---
+- name: Mapping /etc/hosts
+  lineinfile:
+      path: /etc/hosts
+      line: "{{item.ip}} {{item.hostname}}"
+      state: present
+      create: yes
+  with_items:
+     - "{{ (hostvars[inventory_hostname]['publicIp']) }}"
+
+- name: Active Firewalld
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: modprobe
+  command: modprobe br_netfilter    
+    
+- name: Active masquerade
+  firewalld:
+    masquerade: yes
+    state: enabled
+    permanent: yes
+    zone: dmz
+
+- name: "Reload service firewalld"
+  systemd:
+    name: firewalld
+    state: reloaded
+
+- name: Allow kubernetes to properly handle traffic with the firewall
+  lineinfile:
+      path: /etc/sysctl.d/k8s.conf
+      line: "{{item}}"
+      state: present
+      backup: yes
+      create: yes
+  with_items:
+     - 'net.bridge.bridge-nf-call-ip6tables = 1'
+     - 'net.bridge.bridge-nf-call-iptables = 1'
+
+- name: Update sysctl
+  command: sysctl --system
+
+- name: Disable Swap
+  shell: swapoff -a
+
+- name: Comment all Swap entries on /etc/fstab
+  replace:
+    path: /etc/fstab
+    regexp: '(^/.*swap*)'
+    replace: '# \1'

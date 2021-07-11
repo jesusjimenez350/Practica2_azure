@@ -1,0 +1,22 @@
+---
+- name: Add kubernetes repo
+  yum_repository:
+    name: kubernetes
+    baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    enabled: 1
+    gpgcheck: 1
+    repo_gpgcheck: 1
+    gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    exclude: kubelet kubeadm kubectl
+
+- name: Install Kubernetes
+  dnf:
+    name: ['kubelet','kubeadm','kubectl']
+    state: present
+    disable_excludes : kubernetes
+
+- name: Enable kubelet
+  service:
+    name: 'kubelet'
+    enabled: yes
+    state: started

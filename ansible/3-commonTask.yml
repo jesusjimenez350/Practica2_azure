@@ -1,0 +1,7 @@
+# Common tasks to perform on the master node and workers
+
+- hosts: Workers
+  order: sorted
+  become: yes
+  roles:
+    - common_config

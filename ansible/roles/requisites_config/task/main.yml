@@ -1,0 +1,48 @@
+---
+- name: Set timezone to Europe/Madrid
+  timezone:
+    name: Europe/Madrid
+
+- name: Install
+  dnf:
+    name: 
+      - nfs-utils
+      - rpcbind
+      - chrony
+      - ini
+      - nfs4-acl-tools
+      - wget
+    state: 'latest'
+
+- name: Active Chrony
+  service: 
+    name: chronyd
+    enabled: yes
+    state: started
+
+- name: Set timezone to Europe/Madrid
+  shell: timedatectl set-ntp true
+
+- name: Mapping /etc/hosts
+  lineinfile:
+      path: /etc/hosts
+      line: "{{item.ip}} {{item.hostname}}"
+      state: present
+      create: yes
+  with_items:
+     - "{{ (hostvars[inventory_hostname]['publicIp']) }}"
+
+- name: Active Firewalld
+  service:
+    name: firewalld
+    enabled: yes
+    state: started
+
+- name: Comment all Swap entries on /etc/fstab
+  replace:
+    path: /etc/fstab
+    regexp: '(^/.*swap*)'
+    replace: '# \1'
+
+- name: Disable Swap
+  shell: swapoff -a

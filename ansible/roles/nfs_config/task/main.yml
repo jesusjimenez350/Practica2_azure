@@ -1,0 +1,52 @@
+---
+- name: "Create /srv/nfs directory"
+  file:
+    path: /srv/nfs
+    state: directory
+    owner: adminUsername
+    group: adminUsername
+    mode: '0775'
+
+- name: Install packages
+  dnf:
+    name: 
+      - nfs-utils
+      - net-tools
+    state: 'latest'
+    
+- name: Enable and run nfs-server 
+  service:
+    name: nfs-server
+    enabled: yes
+    state: started
+
+- name: Copy exports file
+  template:
+    src: etcExports.j2
+    dest: /etc/exports
+    owner: root
+    group: root
+    mode: 0644
+
+- name: "Read again /etc/exports 1"
+  command:
+    cmd: exportfs -r
+
+- name: "Read again /etc/exports 2"
+  command:
+    cmd: exportfs -s
+
+- name: Open ports
+  firewalld:
+    service: "{{item}}"
+    permanent: true
+    state: enabled
+  with_items:
+    - nfs
+    - rpc-bind
+    - mountd
+
+- name: Reload firewall config 
+  systemd:
+    name: firewalld
+    state: reloaded
