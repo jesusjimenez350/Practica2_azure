@@ -8,6 +8,8 @@
     repo_gpgcheck: 1
     gpgkey: https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
     exclude: kubelet kubeadm kubectl
+    description: Kubernetes repository
+    #description is required
 
 - name: Install Kubernetes
   dnf:
@@ -15,8 +17,16 @@
     state: present
     disable_excludes : kubernetes
 
-- name: Enable kubelet
-  service:
-    name: 'kubelet'
-    enabled: yes
-    state: started
+#- name: Enable kubelet
+#  service:
+#    name: 'kubelet'
+#    enabled: yes
+#    state: started
+
+- name: enable kubelet
+  become: yes
+  command: systemctl enable kubelet
+
+- name: start kubelet 
+  become: yes
+  command: systemctl start kubelet

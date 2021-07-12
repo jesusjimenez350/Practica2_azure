@@ -8,11 +8,19 @@
   with_items:
      - "{{ (hostvars[inventory_hostname]['publicIp']) }}"
 
-- name: Active Firewalld
-  service:
-    name: firewalld
-    enabled: yes
-    state: started
+#- name: Active Firewalld
+#  service:
+#    name: firewalld
+#    enabled: yes
+#    state: started
+
+- name: run firewall 
+  become: yes
+  command: systemctl enable firewalld
+
+- name: start firewall 
+  become: yes
+  command: systemctl start firewalld
 
 - name: modprobe
   command: modprobe br_netfilter    
@@ -24,10 +32,14 @@
     permanent: yes
     zone: dmz
 
-- name: "Reload service firewalld"
-  systemd:
-    name: firewalld
-    state: reloaded
+#- name: "Reload service firewalld"
+#  systemd:
+#    name: firewalld
+#    state: reloaded
+
+- name: reolad service firewall 
+  become: yes
+  command: firewall-cmd --reload
 
 - name: Allow kubernetes to properly handle traffic with the firewall
   lineinfile:

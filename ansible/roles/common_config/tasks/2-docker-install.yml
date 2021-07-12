@@ -4,11 +4,19 @@
 
 - name: Install docker
   dnf:
-    name: ["docker-ce-20.10.6-3.el8", "containerd.io"]
+    name: docker-ce-20.10.6-3.el8
     state: present
 
-- name: Enable and run docker
-  service:
-    name: 'docker'
-    enabled: yes
-    state: started
+#- name: Enable and run docker
+#  service:
+#    name: 'docker'
+#    enabled: yes
+#    state: started
+
+- name: Enable docker service
+  become: yes
+  command: systemctl enable docker
+
+- name: Start docker service
+  become: yes
+  command: systemctl start docker
