@@ -14,11 +14,19 @@
       - net-tools
     state: 'latest'
     
-- name: Enable and run nfs-server 
-  service:
-    name: nfs-server
-    enabled: yes
-    state: started
+#- name: Enable and run nfs-server 
+#  systemctl:
+#    name: nfs-server
+#    enabled: yes
+#    state: started
+
+- name: enable chronyd
+  become: yes
+  command: systemctl  enable nfs-server
+
+- name: start chronyd 
+  become: yes
+  command: systemctl start nfs-server
 
 - name: Copy exports file
   template:
@@ -36,6 +44,21 @@
   command:
     cmd: exportfs -s
 
+#- name: Enable and run firewall
+#  systemd:
+#    state: restarted
+#    daemon_reload: yes
+#    name: firewalld
+#    enabled: yes
+
+- name: run firewall 
+  become: yes
+  command: systemctl enable firewalld
+
+- name: start firewall 
+  become: yes
+  command: systemctl start firewalld
+
 - name: Open ports
   firewalld:
     service: "{{item}}"
@@ -46,7 +69,11 @@
     - rpc-bind
     - mountd
 
-- name: Reload firewall config 
-  systemd:
-    name: firewalld
-    state: reloaded
+#- name: Reload firewall config 
+#  systemd:
+#    name: firewalld
+#    state: reloaded
+
+- name: reolad firewall 
+  become: yes
+  command: firewall-cmd --reload
