@@ -1,0 +1,16 @@
+---
+- name: Open ports
+  firewalld:
+    port: "{{item}}"
+    permanent: true
+    state: enabled
+  with_items:
+    - 10250/tcp
+    - 30000/tcp
+    - 32767/tcp
+    - 8285/udp
+    - 8472/udp
+
+- name: reolad service firewall 
+  become: yes
+  command: firewall-cmd --reload

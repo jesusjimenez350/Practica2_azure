@@ -1,0 +1,70 @@
+---
+- name: Open ports
+  firewalld:
+    port: "{{item}}"
+    permanent: true
+    state: enabled
+  with_items:
+    - 6443/tcp
+    - 2379-2380/tcp
+    - 10250/tcp
+    - 10251/tcp
+    - 10252/tcp
+    - 10255/tcp
+    - 8285/udp
+    - 8472/udp
+
+- name: reolad firewall 
+  become: yes
+  command: firewall-cmd --reload
+
+- name: kubeadm config
+  command: kubeadm config images pull
+
+- name: allow access from workers
+  firewalld:
+    permanent: true
+    state: enabled
+    rich_rule: "{{ item }}"
+  with_items:
+    - "rule family=ipv4 source address={{ (hostvars[inventory_hostname]['publicIp'][1].ip) }}/32 accept"
+    - "rule family=ipv4 source address={{ (hostvars[inventory_hostname]['publicIp'][2].ip) }}/32 accept"
+
+- name: reolad firewall 
+  become: yes
+  command: firewall-cmd --reload
+
+- name: 'Permitimos el acceso de los contenedores a localhost'
+  firewalld:
+    permanent: true
+    zone: public
+    state: enabled
+    rich_rule: "rule family=ipv4 source address=172.17.0.0/16 accept"
+
+- name: reolad firewall 
+  become: yes
+  command: firewall-cmd --reload
+
+- name: Install kubernetes CNI plugin and define PODs network
+  command: kubeadm init --pod-network-cidr 192.169.0.0/16
+  register: kubeadmResult
+
+- name: Save command in file
+  local_action: copy content={{ kubeadmResult.stdout }} dest=./kubeadmResult
+  become: no
+
+- name: Create /root/.kube directory
+  file:
+    path: /root/.kube
+    state: directory
+
+- name: authorize the root user to access the cluster
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    owner: root
+    group: root
+
+- name: Configure a self-hosted Canal installation
+  command: "kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml"
