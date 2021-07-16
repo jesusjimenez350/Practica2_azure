@@ -16,14 +16,14 @@
   command: firewall-cmd --reload
 
 - name: Get file with command
-  copy: src=./kubeadmResult dest=./kubeadmResult
+  copy: src=./join_command dest=./join_command
 
 - name: get command
-  shell: cat ./kubeadmResult
-  register: kubeJoinLaunch2
-- name: Print variable
-  debug: "-------- {{kubeJoinLaunch2.stdout_lines}}"
+  shell: cat ./join_command
+  register: join_command_run
 
-#- name: Run join
-#  shell: "{{kubeJoinLaunch.stdout}}"
-
+- name: Print command
+  debug: msg="{{join_command_run.stdout}}"
+  
+- name: Run join
+  shell: "{{join_command_run.stdout}}"
