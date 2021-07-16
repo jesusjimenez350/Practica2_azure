@@ -34,7 +34,7 @@
   become: yes
   command: firewall-cmd --reload
 
-- name: 'Permitimos el acceso de los contenedores a localhost'
+- name: allow the access of the containers to localhost
   firewalld:
     permanent: true
     zone: public
@@ -48,9 +48,11 @@
 - name: Install kubernetes CNI plugin and define PODs network
   command: kubeadm init --pod-network-cidr 192.169.0.0/16
   register: kubeadmResult
+- debug: 
+    msg: "{{ kubeadmResult.stdout_lines }}"
 
 - name: Save command in file
-  local_action: copy content={{ kubeadmResult.stdout }} dest=./kubeadmResult
+  local_action: copy content={{ kubeadmResult.stdout_lines }} dest=./kubeadmResult
   become: no
 
 - name: Create /root/.kube directory

@@ -1,4 +1,9 @@
 ---
+#- name: updating SO
+#  dnf:
+#    name: "*"
+#    state: latest
+
 - name: Set timezone to Europe/Madrid
   timezone:
     name: Europe/Madrid
@@ -18,19 +23,13 @@
 #- name: Active Chrony
 #  service:
 #    name: chronyd
+#    enabled: true
 #    state: started
 
-#- name: Active Chrony
-#  service:
-#    name: chronyd
-#    enabled: true
-
 - name: enable chronyd
-  become: yes
   command: /usr/bin/systemctl enable chronyd
 
 - name: start chronyd 
-  become: yes
   command: /usr/bin/systemctl start chronyd 
 
 

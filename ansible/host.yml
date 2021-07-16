@@ -2,9 +2,9 @@ all:
   vars:
      ansible_python_interpreter: '/usr/bin/python3'
      publicIp:
-        - {"name": vm-master-nfs, "ip":20.101.46.73, "hostname":vm-master-nfs}
-        - {"name": vm-worker1, "ip":20.101.47.195, "hostname":vm-worker1}
-        - {"name": vm-worker2, "ip":20.101.47.32, "hostname":vm-worker2}
+        - {"name": vm-master-nfs, "ip":104.45.24.68, "hostname":vm-master-nfs}
+        - {"name": vm-worker1, "ip":104.45.21.214, "hostname":vm-worker1}
+        - {"name": vm-worker2, "ip":104.45.21.154, "hostname":vm-worker2}
   children:
     MasterNfs:
       hosts:

@@ -14,3 +14,16 @@
 - name: reolad service firewall 
   become: yes
   command: firewall-cmd --reload
+
+- name: Get file with command
+  copy: src=./kubeadmResult dest=./kubeadmResult
+
+- name: get command
+  shell: cat ./kubeadmResult
+  register: kubeJoinLaunch2
+- name: Print variable
+  debug: "-------- {{kubeJoinLaunch2.stdout_lines}}"
+
+#- name: Run join
+#  shell: "{{kubeJoinLaunch.stdout}}"
+

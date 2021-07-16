@@ -1,6 +1,6 @@
 # Common tasks to perform on the master node and workers
 
-- hosts: all
+- hosts: Workers
   order: sorted
   become: yes
   roles:
