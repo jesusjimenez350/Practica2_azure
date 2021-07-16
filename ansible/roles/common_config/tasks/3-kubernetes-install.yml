@@ -24,9 +24,7 @@
 #    state: started
 
 - name: enable kubelet
-  become: yes
   command: systemctl enable kubelet
 
 - name: start kubelet 
-  become: yes
   command: systemctl start kubelet

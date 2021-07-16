@@ -15,7 +15,6 @@
     - 8472/udp
 
 - name: reolad firewall 
-  become: yes
   command: firewall-cmd --reload
 
 - name: kubeadm config
@@ -31,7 +30,6 @@
     - "rule family=ipv4 source address={{ (hostvars[inventory_hostname]['publicIp'][2].ip) }}/32 accept"
 
 - name: reolad firewall 
-  become: yes
   command: firewall-cmd --reload
 
 - name: allow the access of the containers to localhost
@@ -42,7 +40,6 @@
     rich_rule: "rule family=ipv4 source address=172.17.0.0/16 accept"
 
 - name: reolad firewall 
-  become: yes
   command: firewall-cmd --reload
 
 

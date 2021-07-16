@@ -1,0 +1,30 @@
+---
+- name: Ceeate user
+  user:
+    name: kubeadmin
+    home: /home/kubeadmin
+
+- name: Create Directory /home/kubeadmin/.kube
+  file:
+    path: /home/kubeadmin/.kube
+    state: directory 
+
+- name: Copy /etc/kubernetes/admin.conf to /home/kubeadmin/.kube/config
+  copy:
+    remote_src: yes
+    src: /etc/kubernetes/admin.conf
+    dest: /home/kubeadmin/.kube/config
+    owner: kubeadmin
+    
+#- name: Aplicamos los permisos correspondientes
+#  shell: chown kubeadmin. /home/kubeadmin/.kube/config
+
+#no entiendo exáctamente el comando "cat <<EOF > /etc/sudoers.d/kubeadmin", por lo que añado la fila al fichero 
+- name: Config /etc/sudoers.d/kubeadmin
+  lineinfile:
+      path: /etc/sudoers.d/kubeadmin
+      line: '{{item}}'
+      state: present
+      create: yes
+  with_items:
+     - 'ALL            ALL = (ALL) NOPASSWD: ALL'

@@ -15,11 +15,9 @@
 #    state: started
 
 - name: run firewall 
-  become: yes
   command: systemctl enable firewalld
 
 - name: start firewall 
-  become: yes
   command: systemctl start firewalld
 
 - name: modprobe
@@ -38,7 +36,6 @@
 #    state: reloaded
 
 - name: reolad service firewall 
-  become: yes
   command: firewall-cmd --reload
 
 - name: Allow kubernetes to properly handle traffic with the firewall

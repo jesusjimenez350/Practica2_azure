@@ -21,11 +21,9 @@
 #    state: started
 
 - name: enable chronyd
-  become: yes
   command: systemctl  enable nfs-server
 
 - name: start chronyd 
-  become: yes
   command: systemctl start nfs-server
 
 - name: Copy exports file
@@ -52,11 +50,9 @@
 #    enabled: yes
 
 - name: run firewall 
-  become: yes
   command: systemctl enable firewalld
 
 - name: start firewall 
-  become: yes
   command: systemctl start firewalld
 
 - name: Open ports
@@ -75,5 +71,4 @@
 #    state: reloaded
 
 - name: reolad firewall 
-  become: yes
   command: firewall-cmd --reload

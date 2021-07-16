@@ -1,0 +1,8 @@
+# Common tasks to perform on the master node and workers
+
+- hosts: MasterNfs
+  order: sorted
+  become: yes
+  roles:
+    - ingress_controller
+    - non-administrator-user

@@ -14,9 +14,7 @@
 #    state: started
 
 - name: Enable docker service
-  become: yes
   command: systemctl enable docker
 
 - name: Start docker service
-  become: yes
   command: systemctl start docker

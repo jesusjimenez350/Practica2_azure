@@ -12,11 +12,12 @@
     - 8472/udp
 
 - name: reolad service firewall 
-  become: yes
   command: firewall-cmd --reload
 
 - name: Get file with command
-  copy: src=./join_command dest=./join_command
+  copy: 
+    src: ./join_command
+    dest: ./join_command  
 
 - name: get command
   shell: cat ./join_command
