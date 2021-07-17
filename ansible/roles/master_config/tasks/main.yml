@@ -59,6 +59,9 @@
   local_action: copy content={{ join_command.stdout}} dest=./join_command
   become: no
 
+- name: Root user can use kubectl to operate the cluster
+  command: export KUBECONFIG=/etc/kubernetes/admin.conf
+
 - name: Create /root/.kube directory
   file:
     path: /root/.kube
