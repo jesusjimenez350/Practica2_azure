@@ -11,8 +11,10 @@
     - 8285/udp
     - 8472/udp
 
-- name: reolad service firewall 
-  command: firewall-cmd --reload
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
 
 - name: Get file with command
   copy: 
@@ -20,11 +22,11 @@
     dest: ./join_command  
 
 - name: get command
-  shell: cat ./join_command
+  command: cat ./join_command
   register: join_command_run
 
 - name: Print command
   debug: msg="{{join_command_run.stdout}}"
   
 - name: Run join
-  shell: "{{join_command_run.stdout}}"
+  command: "{{join_command_run.stdout}}"

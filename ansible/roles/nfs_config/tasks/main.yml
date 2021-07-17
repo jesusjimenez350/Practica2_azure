@@ -14,17 +14,11 @@
       - net-tools
     state: 'latest'
     
-#- name: Enable and run nfs-server 
-#  systemctl:
-#    name: nfs-server
-#    enabled: yes
-#    state: started
-
-- name: enable chronyd
-  command: systemctl  enable nfs-server
-
-- name: start chronyd 
-  command: systemctl start nfs-server
+- name: Enable and run nfs-server 
+  systemctl:
+    name: nfs-server
+    enabled: yes
+    state: started
 
 - name: Update modification and access time of given file
   copy:
@@ -42,18 +36,12 @@
   command:
     cmd: exportfs -s
 
-#- name: Enable and run firewall
-#  systemd:
-#    state: restarted
-#    daemon_reload: yes
-#    name: firewalld
-#    enabled: yes
-
-- name: run firewall 
-  command: systemctl enable firewalld
-
-- name: start firewall 
-  command: systemctl start firewalld
+- name: Enable and run firewall
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: firewalld
+    enabled: yes
 
 - name: Open ports
   firewalld:
@@ -65,10 +53,7 @@
     - rpc-bind
     - mountd
 
-#- name: Reload firewall config 
-#  systemd:
-#    name: firewalld
-#    state: reloaded
-
-- name: reolad firewall 
-  command: firewall-cmd --reload
+- name: Reload firewall config 
+  systemd:
+    name: firewalld
+    state: reloaded

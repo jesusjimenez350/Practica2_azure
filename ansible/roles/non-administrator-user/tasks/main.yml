@@ -17,7 +17,7 @@
     owner: kubeadmin
     
 #- name: Aplicamos los permisos correspondientes
-#  shell: chown kubeadmin. /home/kubeadmin/.kube/config
+#  command: chown kubeadmin. /home/kubeadmin/.kube/config
 
 #no entiendo exáctamente el comando "cat <<EOF > /etc/sudoers.d/kubeadmin", por lo que añado la fila al fichero 
 - name: Config /etc/sudoers.d/kubeadmin

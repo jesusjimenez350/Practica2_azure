@@ -7,14 +7,8 @@
     name: docker-ce-20.10.6-3.el8
     state: present
 
-#- name: Enable and run docker
-#  service:
-#    name: 'docker'
-#    enabled: yes
-#    state: started
-
-- name: Enable docker service
-  command: systemctl enable docker
-
-- name: Start docker service
-  command: systemctl start docker
+- name: Enable and run docker
+  service:
+    name: 'docker'
+    enabled: yes
+    state: started

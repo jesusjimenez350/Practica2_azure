@@ -30,13 +30,10 @@
     permanent: yes
     zone: dmz
 
-#- name: "Reload service firewalld"
-#  systemd:
-#    name: firewalld
-#    state: reloaded
-
-- name: reolad service firewall 
-  command: firewall-cmd --reload
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
 
 - name: Allow kubernetes to properly handle traffic with the firewall
   lineinfile:
@@ -53,7 +50,7 @@
   command: sysctl --system
 
 - name: Disable Swap
-  shell: swapoff -a
+  command: swapoff -a
 
 - name: Comment all Swap entries on /etc/fstab
   replace:

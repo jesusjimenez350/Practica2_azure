@@ -14,8 +14,10 @@
     - 8285/udp
     - 8472/udp
 
-- name: reolad firewall 
-  command: firewall-cmd --reload
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
 
 - name: kubeadm config
   command: kubeadm config images pull
@@ -29,8 +31,10 @@
     - "rule family=ipv4 source address={{ (hostvars[inventory_hostname]['publicIp'][1].ip) }}/32 accept"
     - "rule family=ipv4 source address={{ (hostvars[inventory_hostname]['publicIp'][2].ip) }}/32 accept"
 
-- name: reolad firewall 
-  command: firewall-cmd --reload
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
 
 - name: allow the access of the containers to localhost
   firewalld:
@@ -39,15 +43,16 @@
     state: enabled
     rich_rule: "rule family=ipv4 source address=172.17.0.0/16 accept"
 
-- name: reolad firewall 
-  command: firewall-cmd --reload
-
+- name: Reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
 
 - name: Install kubernetes CNI plugin and define PODs network
   command: kubeadm init --pod-network-cidr 192.169.0.0/16
 
 - name: Get join token
-  shell: kubeadm token create --print-join-command
+  command: kubeadm token create --print-join-command
   register: join_command
 
 - name: Save command in file
