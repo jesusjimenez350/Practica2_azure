@@ -19,7 +19,6 @@
 #- name: Aplicamos los permisos correspondientes
 #  command: chown kubeadmin. /home/kubeadmin/.kube/config
 
-#no entiendo exáctamente el comando "cat <<EOF > /etc/sudoers.d/kubeadmin", por lo que añado la fila al fichero 
 - name: Config /etc/sudoers.d/kubeadmin
   lineinfile:
       path: /etc/sudoers.d/kubeadmin
@@ -28,3 +27,15 @@
       create: yes
   with_items:
      - 'ALL            ALL = (ALL) NOPASSWD: ALL'
+
+
+- name: Allow kubernetes to properly handle traffic with the firewall
+  lineinfile:
+      path: /etc/sysctl.d/k8s.conf
+      line: "{{item}}"
+      state: present
+      backup: yes
+      create: yes
+  with_items:
+     - 'net.bridge.bridge-nf-call-ip6tables = 1'
+     - 'net.bridge.bridge-nf-call-iptables = 1'
