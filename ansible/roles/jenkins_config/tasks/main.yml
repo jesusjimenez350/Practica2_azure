@@ -1,63 +1,14 @@
 ---
-- name: Add the following hostname entry in /etc/hosts file
-  lineinfile:
-      path: /etc/hosts
-      line: "{{item}}"
-      state: present
-      create: yes
-  with_items:
-     - '192.168.1.190   jenkins.jesusjimenez350.com'
+- name: copying files from jenkins
+  copy:
+    src: ../files/
+    dest: /tmp/jenkins/
 
-- name: Run the following command to enable Jenkins package repository for CentOS 8
+- name: creating jenkins namespace
+  command: kubectl create namespace jenkins
 
-- name: Create a Directory /etc/yum.repos.d/jenkins.repo
-  file:
-    path: /etc/yum.repos.d/jenkins.repo
-    state: directory
-    mode: 0755
+- name: deploy jenkins
+  command: kubectl create -f /tmp/jenkins/jenkins-deployment.yaml --namespace jenkins
 
-- name: Jenkins package repository 
-  get_url:
-    url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
-    dest: /etc/yum.repos.d/jenkins.repo
-
-- name: Jenkins package repository
-  rpm_key:
-    state: present
-    key: https://pkg.jenkins.io/redhat/jenkins.io.key
-
-- name: Install packages
-  dnf:
-    name: java-11-openjdk-devel
-    state: latest
-
-- name: Aplicamos los permisos correspondientes
-  command: java --version
-  register: javaVersion
-
-- name: Print java version
-  debug: msg="{{javaVersion.stdout}}"
-
-- name: Enable and run jenkins
-  service:
-    name: jenkins
-    enabled: yes
-    state: started
-
-- name: Reload service firewalld
-  systemd:
-    name: jenkins
-    state: reloaded
-
-- name: Open ports
-  firewalld:
-    port: "{{item}}"
-    permanent: true
-    state: enabled
-  with_items:
-    - 8080/tcp
-
-- name: Reload service firewalld
-  systemd:
-    name: firewalld
-    state: reloaded
+- name: create the Service
+  command: kubectl create -f /tmp/grafana/jenkins-service.yaml --namespace jenkins
