@@ -1,5 +1,5 @@
 ---
-- name: "Create /srv/nfs directory"
+- name: Create /srv/nfs directory
   file:
     path: /srv/nfs
     state: directory
@@ -26,13 +26,13 @@
 - name: start chronyd 
   command: systemctl start nfs-server
 
-- name: Copy exports file
-  template:
-    src: etcExports.j2
+- name: Update modification and access time of given file
+  copy:
     dest: /etc/exports
-    owner: root
-    group: root
-    mode: 0644
+    content: |
+      /srv/nfs {{ (hostvars[inventory_hostname]['publicIp'][0].ip) }}(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)
+      /srv/nfs {{ (hostvars[inventory_hostname]['publicIp'][1].ip) }}(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)
+      /srv/nfs {{ (hostvars[inventory_hostname]['publicIp'][2].ip) }}(sync,wdelay,hide,no_subtree_check,sec=sys,rw,secure,root_squash,no_all_squash)
 
 - name: "Read again /etc/exports 1"
   command:
