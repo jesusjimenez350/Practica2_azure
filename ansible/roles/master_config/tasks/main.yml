@@ -76,4 +76,4 @@
     group: root
 
 - name: Configure a self-hosted Canal installation
-  command: "kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml"
+  command: kubectl apply -f https://docs.projectcalico.org/manifests/canal.yaml

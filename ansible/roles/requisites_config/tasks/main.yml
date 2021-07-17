@@ -4,6 +4,9 @@
     name: "*"
     state: latest
 
+- name: Unconditionally reboot the machine with all defaults
+  reboot:
+
 - name: Set timezone to Europe/Madrid
   timezone:
     name: Europe/Madrid
@@ -11,7 +14,7 @@
 - name: Install
   dnf:
     name: '{{ item }}'
-    state: 'latest'
+    state: latest
   loop:
     - nfs-utils
     - rpcbind

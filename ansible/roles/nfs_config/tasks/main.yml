@@ -12,10 +12,10 @@
     name: 
       - nfs-utils
       - net-tools
-    state: 'latest'
+    state: latest
     
 - name: Enable and run nfs-server 
-  systemctl:
+  systemd:
     name: nfs-server
     enabled: yes
     state: started
