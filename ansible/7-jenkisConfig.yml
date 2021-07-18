@@ -1,4 +1,4 @@
-# Common tasks to perform on the master node and workers
+# Jenkins playbook
 
 - hosts: MasterNfs
   order: sorted

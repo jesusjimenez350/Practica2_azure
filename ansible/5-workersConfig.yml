@@ -1,4 +1,4 @@
-# Common tasks to perform on the master node and workers
+#Tasks to perform on the workers nodes
 
 - hosts: Workers
   order: sorted

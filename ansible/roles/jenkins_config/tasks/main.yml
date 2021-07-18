@@ -6,9 +6,16 @@
 
 - name: creating jenkins namespace
   command: kubectl create namespace jenkins
+  
+- name: deploy jenkins
+  command: pwd
+  register: printPwd
+
+- name: PrintF
+  debug: msg="{{printPwd.stdout}}"
 
 - name: deploy jenkins
-  command: kubectl create -f /tmp/jenkins/jenkins-deployment.yaml --namespace jenkins
+  command: kubectl create -f /tmp/jenkins/jenkins-deployment.yml --namespace jenkins
 
 - name: create the Service
-  command: kubectl create -f /tmp/grafana/jenkins-service.yaml --namespace jenkins
+  command: kubectl create -f /tmp/jenkins/jenkins-service.yml --namespace jenkins

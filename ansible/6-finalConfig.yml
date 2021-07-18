@@ -1,4 +1,4 @@
-# Common tasks to perform on the master node and workers
+# Ingress controller an non administrator user config
 
 - hosts: MasterNfs
   order: sorted
